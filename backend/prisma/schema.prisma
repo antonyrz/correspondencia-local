@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Departamentos {
+  id          Int          @id @default(autoincrement())
+  nombre      String       @db.VarChar(150)
+  descripcion String?      @db.VarChar(255)
+  documentos  Documentos[]
+  usuarios    Usuarios[]
+
+  @@map("departamentos")
+}
+
+model Usuarios {
+  id                     Int                @id @default(autoincrement())
+  departamento_id        Int
+  nombre                 String             @db.VarChar(100)
+  apellido               String             @db.VarChar(100)
+  cedula                 String             @unique @db.VarChar(20)
+  fecha_registro         DateTime           @default(now())
+  creado_por             Int?
+  password               String             @db.VarChar(255)
+  rol_usuario            Int?
+  documentos_eliminados  Documentos[]       @relation("UsuarioElimina")
+  documentos_registrados Documentos[]       @relation("UsuarioRegistra")
+  historiales            HistorialEstatus[]
+  creador                Usuarios?          @relation("UsuarioCreador", fields: [creado_por], references: [id])
+  usuarios_creados       Usuarios[]         @relation("UsuarioCreador")
+  departamento           Departamentos      @relation(fields: [departamento_id], references: [id])
+  roles                  roles?             @relation(fields: [rol_usuario], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("usuarios")
+}
+
+model Categorias {
+  id             Int             @id @default(autoincrement())
+  nombre         String          @db.VarChar(100)
+  origenDestinos OrigenDestino[]
+
+  @@map("categorias")
+}
+
+model OrigenDestino {
+  id                 Int          @id @default(autoincrement())
+  nombre             String       @db.VarChar(150)
+  categoria_id       Int
+  documentos_destino Documentos[] @relation("DestinoDoc")
+  documentos_origen  Documentos[] @relation("OrigenDoc")
+  categoria          Categorias   @relation(fields: [categoria_id], references: [id])
+
+  @@map("origen_destino")
+}
+
+model Recaudos {
+  id                 Int                  @id @default(autoincrement())
+  nombre             String               @db.VarChar(150)
+  documentosRecaudos DocumentosRecaudos[]
+
+  @@map("recaudos")
+}
+
+model Documentos {
+  id                       BigInt               @id @default(autoincrement())
+  fecha                    DateTime             @default(now())
+  oficio_tipo              String               @db.VarChar(50)
+  oficio_serial            String               @db.VarChar(100)
+  descripcion              String
+  origen_id                Int
+  destino_id               Int?
+  requiere_respuesta       Boolean              @default(false)
+  tiene_recaudos           Boolean              @default(false)
+  documento_padre_id       BigInt?
+  prioridad                Boolean              @default(false)
+  estatus                  String               @db.VarChar(50)
+  pdf_url                  String?              @db.VarChar(500)
+  pdf_nombre_original      String?              @db.VarChar(255)
+  pdf_peso_kb              Int?
+  registrado_idusuario     Int
+  eliminado_at             DateTime?
+  eliminado_por_usuario_id Int?
+  razon_eliminacion        String?
+  departamento_actual_id   Int                  @default(12)
+  observacion              String?
+  departamento_actual      Departamentos        @relation(fields: [departamento_actual_id], references: [id], onUpdate: NoAction)
+  destino                  OrigenDestino?       @relation("DestinoDoc", fields: [destino_id], references: [id])
+  documento_padre          Documentos?          @relation("RelacionPadre", fields: [documento_padre_id], references: [id])
+  documentos_hijos         Documentos[]         @relation("RelacionPadre")
+  usuario_elimina          Usuarios?            @relation("UsuarioElimina", fields: [eliminado_por_usuario_id], references: [id])
+  origen                   OrigenDestino        @relation("OrigenDoc", fields: [origen_id], references: [id])
+  usuario_registra         Usuarios             @relation("UsuarioRegistra", fields: [registrado_idusuario], references: [id])
+  recaudos                 DocumentosRecaudos[]
+  historial_estatus        HistorialEstatus[]
+
+  @@map("documentos")
+}
+
+model DocumentosRecaudos {
+  id           BigInt     @id @default(autoincrement())
+  documento_id BigInt
+  recaudo_id   Int
+  documento    Documentos @relation(fields: [documento_id], references: [id], onDelete: Cascade)
+  recaudo      Recaudos   @relation(fields: [recaudo_id], references: [id])
+
+  @@map("documentos_recaudos")
+}
+
+model HistorialEstatus {
+  id             BigInt     @id @default(autoincrement())
+  documento_id   BigInt
+  estatus_previo String?    @db.VarChar(50)
+  estatus_nuevo  String     @db.VarChar(50)
+  fecha_change   DateTime   @default(now())
+  usuario_id     Int
+  documento      Documentos @relation(fields: [documento_id], references: [id], onDelete: Cascade)
+  usuario        Usuarios   @relation(fields: [usuario_id], references: [id])
+
+  @@map("historial_estatus")
+}
+
+model roles {
+  id       Int        @id @default(autoincrement())
+  nombre   String     @unique @db.VarChar(50)
+  usuarios Usuarios[]
+}

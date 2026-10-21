@@ -16,11 +16,13 @@ import {
   Eye,
   MapPin,
   Paperclip,
+  MessageSquarePlus,
 } from 'lucide-react';
 import { isAxiosError } from 'axios';
 import { useAuthStore } from '../store/useAuthStore';
 import {
   obtenerTodosDocumentos,
+  getDocumentoDetalle,
   eliminarDocumento,
   getCatalogs,
   type CategoriaCatalog,
@@ -33,6 +35,16 @@ interface OrigenDestino {
   id: number;
   nombre: string;
   categoria_id?: number;
+}
+
+interface DocumentoPadre {
+  id: string;
+  oficio_serial: string;
+  oficio_tipo: string;
+  descripcion: string;
+  estatus?: string;
+  departamento_actual_id?: number | null;
+  departamento_actual?: OrigenDestino | null;
 }
 
 interface Documento {
@@ -49,12 +61,25 @@ interface Documento {
   destino?: OrigenDestino | null;
   departamento_actual_id?: number | null;
   departamento_actual?: OrigenDestino | null;
+  documento_padre_id?: string | number | null;
+  documento_padre?: DocumentoPadre | null;
   usuario_registra?: {
     nombre: string;
     apellido: string;
   };
-  observacion: string;
   recaudos?: Array<{ id: string; recaudo_id?: number; recaudo?: { nombre: string } }>;
+  observacion: string;
+  documentos_hijos?: Array<{
+    id: string;
+    oficio_serial: string;
+    oficio_tipo: string;
+    descripcion: string;
+    fecha: string;
+    estatus: string;
+    pdf_url?: string;
+    observacion?: string | null;
+    destino?: { id: number; nombre: string } | null;
+  }>;
 }
 
 const ESTATUS_CONFIG: Record<string, { label: string; color: string }> = {
@@ -244,6 +269,15 @@ export const BusquedaCorrespondencia = () => {
     }
   };
 
+  const abrirDetalle = async (doc: Documento) => {
+    setDocumentoSeleccionado(doc);
+    try {
+      const detalle = await getDocumentoDetalle(doc.id);
+      setDocumentoSeleccionado(detalle);
+    } catch {
+      // Se muestra el documento de la lista si el detalle no carga
+    }
+  };
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
       <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
@@ -383,7 +417,7 @@ export const BusquedaCorrespondencia = () => {
           onScroll={sincronizarDesdeTabla}
           className="overflow-x-auto"
         >
-          <table ref={tablaRef} className="w-full min-w-[1180px] text-left border-collapse">
+          <table ref={tablaRef} className="w-full min-w-295 text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 <th className="p-4">Estatus</th>
@@ -435,7 +469,7 @@ export const BusquedaCorrespondencia = () => {
                       </td>
                       <td className="p-4 whitespace-nowrap">
                         <button
-                          onClick={() => setDocumentoSeleccionado(doc)}
+                          onClick={() => abrirDetalle(doc)}
                           className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
                         >
                           <Eye size={14} /> Ver Detalles
@@ -564,6 +598,39 @@ export const BusquedaCorrespondencia = () => {
                 </span>
               </div>
 
+              {documentoSeleccionado.documento_padre && (
+                <div className="bg-cyan-50 border border-cyan-200 rounded-xl p-4 space-y-2">
+                  <h3 className="text-xs font-bold text-cyan-800 uppercase tracking-wider">
+                    Respuesta al documento original
+                  </h3>
+                  <p className="text-sm font-semibold text-slate-800">
+                    {documentoSeleccionado.documento_padre.oficio_serial}
+                    {documentoSeleccionado.documento_padre.oficio_tipo
+                      ? ` · ${documentoSeleccionado.documento_padre.oficio_tipo}`
+                      : ''}
+                  </p>
+                  {documentoSeleccionado.documento_padre.descripcion && (
+                    <p className="text-sm text-slate-700">
+                      {documentoSeleccionado.documento_padre.descripcion}
+                    </p>
+                  )}
+                  <p className="text-xs text-slate-600">
+                    Ubicación actual del original:{' '}
+                    <span className="font-semibold text-slate-800">
+                      {documentoSeleccionado.documento_padre.departamento_actual?.nombre || departamentoNombre}
+                    </span>
+                  </p>
+                  {documentoSeleccionado.destino?.nombre && (
+                    <p className="text-xs text-slate-600">
+                      Destino de esta respuesta:{' '}
+                      <span className="font-semibold text-slate-800">
+                        {documentoSeleccionado.destino.nombre}
+                      </span>
+                    </p>
+                  )}
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
                 <div>
                   <div className="flex items-center gap-2 text-slate-500 text-xs font-bold uppercase mb-1">
@@ -627,6 +694,51 @@ export const BusquedaCorrespondencia = () => {
                         className="text-xs font-medium text-slate-700 bg-slate-100 px-3 py-2 rounded-lg"
                       >
                         • {r.recaudo?.nombre || `Recaudo #${r.recaudo_id}`}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {documentoSeleccionado.documentos_hijos && documentoSeleccionado.documentos_hijos.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <MessageSquarePlus size={14} /> Respuestas registradas
+                  </h3>
+                  <ul className="space-y-2">
+                    {documentoSeleccionado.documentos_hijos.map((hijo) => (
+                      <li
+                        key={hijo.id}
+                        className="text-sm bg-cyan-50 border border-cyan-200 rounded-xl p-3 space-y-1"
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <p className="font-semibold text-slate-800">{hijo.oficio_serial}</p>
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
+                              ESTATUS_CONFIG[hijo.estatus]?.color || 'bg-slate-100 text-slate-700 border-slate-300'
+                            }`}
+                          >
+                            {ESTATUS_CONFIG[hijo.estatus]?.label || hijo.estatus}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-500">{hijo.oficio_tipo}</p>
+                        <p className="text-slate-700">{hijo.descripcion}</p>
+                        {hijo.destino?.nombre && (
+                          <p className="text-xs text-slate-500">Destino: {hijo.destino.nombre}</p>
+                        )}
+                        <p className="text-xs text-slate-400">
+                          {hijo.fecha ? new Date(hijo.fecha).toLocaleDateString() : ''}
+                        </p>
+                        {hijo.pdf_url && (
+                          <a
+                            href={hijo.pdf_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs font-semibold text-blue-600 hover:underline inline-flex items-center gap-1"
+                          >
+                            Ver PDF <ExternalLink size={12} />
+                          </a>
+                        )}
                       </li>
                     ))}
                   </ul>

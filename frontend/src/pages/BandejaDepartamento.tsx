@@ -228,8 +228,8 @@ export const BandejaDepartamento = () => {
   const esTabRespuestas = filtroEstatus === 'RESPUESTAS';
   const esTabArchivados = filtroEstatus === 'ARCHIVADO';
   const documentosArchivados = [
-    ...documentosDepartamento.filter((doc) => doc.estatus === 'ARCHIVADO'),
-    ...documentosRespuestas.filter((doc) => doc.estatus === 'ARCHIVADO' && estaEnMiDepto(doc)),
+    ...documentosDepartamento.filter((doc) => doc.estatus === 'ARCHIVADO' && !doc.documento_padre_id),
+    ...documentosRespuestas.filter((doc) => doc.estatus === 'ARCHIVADO' && estaEnMiDepto(doc) && !doc.documento_padre_id),
   ];
 
   type TipoSeleccionRespuesta = 'POR_AVALAR' | 'DEVUELTO_UNIDAD' | 'AVALADO' | 'TRAMITADO';
@@ -241,7 +241,6 @@ export const BandejaDepartamento = () => {
     if (doc.estatus === 'POR_AVALAR') return !tipo || tipo === 'POR_AVALAR';
     if (doc.estatus === 'DEVUELTO_UNIDAD') return !tipo || tipo === 'DEVUELTO_UNIDAD';
     if (doc.estatus === 'AVALADO' && estaEnMiDepto(doc)) return !tipo || tipo === 'AVALADO';
-    if (doc.estatus === 'TRAMITADO' && estaEnMiDepto(doc)) return !tipo || tipo === 'TRAMITADO';
     return false;
   };
 
@@ -318,13 +317,6 @@ export const BandejaDepartamento = () => {
       Boolean(doc.documento_padre_id) &&
       estaEnMiDepto(doc)
   );
-  const documentosTramitadosSeleccionados = documentos.filter(
-    (doc) =>
-      seleccionados.includes(doc.id) &&
-      doc.estatus === 'TRAMITADO' &&
-      Boolean(doc.documento_padre_id) &&
-      estaEnMiDepto(doc)
-  );
 
   const tipoSeleccionActivo: TipoSeleccionActivo = esTabRespuestas
     ? documentosPorAvalarSeleccionados.length > 0
@@ -333,8 +325,6 @@ export const BandejaDepartamento = () => {
       ? 'DEVUELTO_UNIDAD'
       : documentosAvaladosSeleccionados.length > 0
       ? 'AVALADO'
-      : documentosTramitadosSeleccionados.length > 0
-      ? 'TRAMITADO'
       : null
     : documentosAsignadosSeleccionados.length > 0
       ? 'ASIGNADO'
@@ -364,18 +354,14 @@ export const BandejaDepartamento = () => {
   const todosSeleccionadosEnPagina =
     documentosSeleccionables.length > 0 &&
     documentosSeleccionables.every((doc) => seleccionados.includes(doc.id));
-  const mostrarArchivar =
-    (!esTabRespuestas && documentosRecibidoUnidadSeleccionados.length > 0) ||
-    (esTabRespuestas && documentosTramitadosSeleccionados.length > 0);
+  const mostrarArchivar = documentosRecibidoUnidadSeleccionados.length > 0;
   const mostrarRegistrarRespuesta =
     !esTabRespuestas &&
     seleccionados.length === 1 &&
     documentosRecibidoUnidadSeleccionados.length === 1;
   const mostrarEnviarAval = esTabRespuestas && documentosPorAvalarSeleccionados.length > 0;
   const mostrarTramitar = esTabRespuestas && documentosAvaladosSeleccionados.length > 0;
-  const idsParaArchivar = esTabRespuestas
-    ? documentosTramitadosSeleccionados.map((d) => d.id)
-    : documentosRecibidoUnidadSeleccionados.map((d) => d.id);
+  const idsParaArchivar = documentosRecibidoUnidadSeleccionados.map((d) => d.id);
 
   const handleSelectAll = () => {
     if (selectAllDeshabilitado) return;
@@ -929,15 +915,7 @@ export const BandejaDepartamento = () => {
                                 <Stamp size={14} /> TRAMITADO
                               </button>
                             )}
-                            {esTabRespuestas && doc.estatus === 'TRAMITADO' && estaEnMiDepto(doc) && (
-                              <button
-                                onClick={() => solicitarArchivar([doc.id])}
-                                disabled={loadingArchivar}
-                                className="px-3 py-1.5 bg-slate-700 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1 transition-colors cursor-pointer shadow-sm disabled:opacity-60"
-                              >
-                                <Archive size={14} /> ARCHIVAR
-                              </button>
-                            )}
+                           
                             {puedeEditar && (
                               <button
                                 onClick={() =>
@@ -1230,16 +1208,6 @@ export const BandejaDepartamento = () => {
                   className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-lg flex items-center gap-2 transition-colors cursor-pointer shadow-sm disabled:opacity-60"
                 >
                   <FileCheck size={16} /> {loadingTramitar ? 'Procesando...' : 'TRAMITADO'}
-                </button>
-              ) : documentoSeleccionado.estatus === 'TRAMITADO' &&
-                documentoSeleccionado.documento_padre_id &&
-                estaEnMiDepto(documentoSeleccionado) ? (
-                <button
-                  onClick={() => solicitarArchivar([documentoSeleccionado.id])}
-                  disabled={loadingArchivar}
-                  className="px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white text-sm font-semibold rounded-lg flex items-center gap-2 transition-colors cursor-pointer shadow-sm disabled:opacity-60"
-                >
-                  <Archive size={16} /> {loadingArchivar ? 'Archivando...' : 'ARCHIVAR'}
                 </button>
               ) : (
                 <div />

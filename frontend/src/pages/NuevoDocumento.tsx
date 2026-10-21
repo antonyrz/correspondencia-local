@@ -102,7 +102,7 @@ type DocumentoForm = z.infer<ReturnType<typeof crearDocumentoSchema>>;
 export const NuevoDocumento = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation(); 
   const estadoNavegacion = location.state as { from?: string; documentoPadreId?: string } | null;
   const rutaOrigen = estadoNavegacion?.from;
   const documentoPadreId = estadoNavegacion?.documentoPadreId;
@@ -116,6 +116,8 @@ export const NuevoDocumento = () => {
   const [loading, setLoading] = useState(false);
   const [cargandoDocumento, setCargandoDocumento] = useState(esEdicion || esRespuesta);
   const [archivoActual, setArchivoActual] = useState<string | null>(null);
+  const [mostrarRecaudos, setMostrarRecaudos] = useState(false);	
+
   const [documentoPadre, setDocumentoPadre] = useState<{
     id: string;
     oficio_serial: string;
@@ -246,6 +248,7 @@ export const NuevoDocumento = () => {
               .filter(Boolean)
           : [];
 
+        setMostrarRecaudos(Boolean(doc.documento_padre_id));
         reset({
           serial: doc.oficio_serial || '',
           fechaEmision: doc.fecha ? String(doc.fecha).slice(0, 10) : '',
@@ -362,6 +365,7 @@ export const NuevoDocumento = () => {
           const item = recaudosCatalogo.find((r) => r.id === idRecaudo);
           return item ? !esRecaudoSinAdjuntos(item.nombre) : true;
         });
+
 
         formData.append('recaudo_ids', JSON.stringify(idsRecaudos));
         formData.append('tiene_recaudos', String(tieneRecaudos));
@@ -594,7 +598,7 @@ export const NuevoDocumento = () => {
           </div>
 
           {/* Recaudos */}
-          {!esRespuesta && (
+          {(!esRespuesta && !mostrarRecaudos) ? (
           <div className="p-4 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-3">
             <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
               <CheckSquare size={16} className="text-slate-400" /> Recaudos y Anexos Adjuntos
@@ -626,6 +630,8 @@ export const NuevoDocumento = () => {
             </div>
               {errors.recaudosSeleccionados && <p className="text-red-500 text-xs mt-1 font-medium">{errors.recaudosSeleccionados.message}</p>}
           </div>
+          ) : (
+            toggleRecaudo('12', true)
           )}
 
           <div>

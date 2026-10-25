@@ -318,7 +318,7 @@ export const NuevoDocumento = () => {
 
       if (verificacion.existe) {
         const mensaje =
-          'Ya existe un documento registrado con ese serial. No se puede guardar.';
+          'Ya existe un documento registrado con el mismo OFICIO SERIAL. No se puede guardar.';
         alert(mensaje);
         setError('serial', { type: 'manual', message: mensaje });
         setErrorApi(mensaje);

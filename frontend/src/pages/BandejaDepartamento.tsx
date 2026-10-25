@@ -122,9 +122,9 @@ export const BandejaDepartamento = () => {
   // 1. Obtenemos el usuario del store global como respaldo
   const usuarioStore = useAuthStore((state) => state.user);
   const rol = (usuarioStore?.rol || '').toLowerCase().trim();
-  const puedeEditar = rol === 'administrador';
+  const puedeEditar = rol === 'administrador' || rol === 'jefe_departamento';
   const esAdmin = rol === 'administrador';
-
+  const esJefeDepartamento = rol.includes('jefe');
   
   // 2. Intentamos capturar el contexto del Outlet de manera segura
   const context = useOutletContext<ContextoOutlet | undefined>();
@@ -527,12 +527,12 @@ export const BandejaDepartamento = () => {
   };
 
   const handleDevolverADespacho = async (docId: string) => {
-    const motivo = prompt('Por favor, indique el motivo de la devolución a Despacho:');
-    if (!motivo) return;
+    const confirmacion = confirm('¿Estás seguro de querer devolver el documento a Despacho?');
+    if (!confirmacion) return;
 
     try {
       setErrorApi(null);
-      await apiDevolverADespacho(docId, motivo);
+      await apiDevolverADespacho(docId, confirmacion);
       await cargarDocumentos();
       setSeleccionados((prev) => prev.filter((id) => id !== docId));
       if (documentoSeleccionado?.id === docId) {
@@ -730,6 +730,7 @@ export const BandejaDepartamento = () => {
             Respuestas ({documentosRespuestas.length})
           </button>
         </div>
+   
 
         {documentosAsignadosSeleccionados.length > 0 && (
           <div className="flex items-center gap-3 bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-xl animate-fade-in">
@@ -745,6 +746,13 @@ export const BandejaDepartamento = () => {
           </div>
         )}
       </div>
+      <Paginacion
+            paginaActual={paginaSegura}
+            totalPaginas={totalPaginas}
+            totalItems={totalItems}
+            itemsPorPagina={ITEMS_POR_PAGINA}
+            onCambiarPagina={setPaginaActual}
+        />
 
   {/* Tabla */}
   <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -916,7 +924,7 @@ export const BandejaDepartamento = () => {
                               </button>
                             )}
                            
-                            {puedeEditar && (
+                            {puedeEditar && filtroEstatus === 'RESPUESTAS' && (
                               <button
                                 onClick={() =>
                                   navigate(`/documentos/editar/${doc.id}`, {
@@ -938,6 +946,17 @@ export const BandejaDepartamento = () => {
                                 <Trash2 size={14} /> Anular
                               </button>
                             )}
+
+                            {esJefeDepartamento && filtroEstatus === 'RESPUESTAS' && (
+                              <button
+                                onClick={() =>
+                                  setDocumentoAEliminar({ id: doc.id, oficio_serial: doc.oficio_serial })
+                                }
+                                className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white border border-red-600 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                              >
+                                <Trash2 size={14} /> Anular
+                              </button>
+                            )}
                           </>
                         )}
                       </td>
@@ -949,13 +968,7 @@ export const BandejaDepartamento = () => {
           </table>
         </div>
 
-        <Paginacion
-          paginaActual={paginaSegura}
-          totalPaginas={totalPaginas}
-          totalItems={totalItems}
-          itemsPorPagina={ITEMS_POR_PAGINA}
-          onCambiarPagina={setPaginaActual}
-        />
+        
       </div>
 
       

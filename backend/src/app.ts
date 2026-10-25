@@ -1,3 +1,4 @@
+process.env.TZ = 'America/Caracas';
 import express from 'express';
 
 const app = express();

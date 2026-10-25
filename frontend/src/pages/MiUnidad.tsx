@@ -19,6 +19,7 @@ import {
   SendHorizontal,
   Stamp,
   FileCheck,
+  Trash2
 } from 'lucide-react';
 import { isAxiosError } from 'axios';
 import { useAuthStore } from '../store/useAuthStore';
@@ -30,10 +31,12 @@ import {
   tramitarDocumentos,
   getDocumentoDetalle,
   enviarRespuestasPorAval,
+  eliminarDocumento,
 } from '../api/documentos.api';
 import { ConfirmModal } from '../components/layout/ConfirmModal';
 import { Paginacion } from '../components/ui/Paginacion';
 import { ITEMS_POR_PAGINA, paginarLista } from '../utils/paginacion';
+import { ConfirmModalEliminar } from '../components/layout/ConfirmModalEliminar';
 
 interface OrigenDestino {
   id: number;
@@ -118,7 +121,9 @@ export const MiUnidad = () => {
   // 1. Obtenemos el usuario del store global como respaldo
   const usuarioStore = useAuthStore((state) => state.user);
   const rol = (usuarioStore?.rol || '').toLowerCase().trim();
-  const puedeEditar = rol === 'administrador';
+  const puedeEditarYAnular = rol === 'administrador' || rol.includes('jefe') || rol.includes('despacho') ;
+  const esAdmin = rol === 'administrador';
+  const esJefeDepartamento = rol.includes('jefe');
   
   // 2. Intentamos capturar el contexto del Outlet de manera segura
   const context = useOutletContext<ContextoOutlet | undefined>();
@@ -150,6 +155,9 @@ export const MiUnidad = () => {
   const [loadingEnviarAval, setLoadingEnviarAval] = useState(false);
   const [loadingTramitar, setLoadingTramitar] = useState(false);
   const [loadingRecepcion, setLoadingRecepcion] = useState(false);
+
+  const [documentoAEliminar, setDocumentoAEliminar] = useState<{ id: string; oficio_serial: string } | null>(null);
+  const [loadingEliminar, setLoadingEliminar] = useState<boolean>(false);
 
   const cargarDocumentos = useCallback(async () => {
     setLoading(true);
@@ -532,12 +540,12 @@ export const MiUnidad = () => {
   };
 
   const handleDevolverADespacho = async (docId: string) => {
-    const motivo = prompt('Por favor, indique el motivo de la devolución a Despacho:');
-    if (!motivo) return;
+    const confirmacion = confirm('¿Estás seguro de querer devolver el documento a Despacho?');
+    if (!confirmacion) return;
 
     try {
       setErrorApi(null);
-      await apiDevolverADespacho(docId, motivo);
+      await apiDevolverADespacho(docId, confirmacion);
       await cargarDocumentos();
       setSeleccionados((prev) => prev.filter((id) => id !== docId));
       if (documentoSeleccionado?.id === docId) {
@@ -547,6 +555,30 @@ export const MiUnidad = () => {
       if (isAxiosError(err)) {
         setErrorApi(err.response?.data?.error || 'Error al devolver el documento');
       }
+    }
+  };
+
+  const handleConfirmarEliminacion = async (motivo: string) => {
+    if (!documentoAEliminar) return;
+
+    try {
+      setLoadingEliminar(true);
+      setErrorApi(null);
+
+      // Enviamos ambos parámetros: id y motivo
+      await eliminarDocumento(documentoAEliminar.id, motivo);
+
+      setSeleccionados((prev) => prev.filter((item) => item !== String(documentoAEliminar.id)));
+      setDocumentoAEliminar(null);
+      await cargarDocumentos();
+    } catch (err) {
+      if (isAxiosError(err)) {
+        setErrorApi(err.response?.data?.error || 'Error al eliminar el documento');
+      } else {
+        setErrorApi('Error de conexión al intentar eliminar el documento');
+      }
+    } finally {
+      setLoadingEliminar(false);
     }
   };
 
@@ -659,7 +691,7 @@ export const MiUnidad = () => {
                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
           >
-            Todos ({documentosFiltrados.length})
+            Todos ({documentosDepartamento.length})
           </button>
 
           <button
@@ -710,6 +742,7 @@ export const MiUnidad = () => {
             Respuestas ({documentosRespuestas.length})
           </button>
         </div>
+     
 
         {documentosAsignadosSeleccionados.length > 0 && (
           <div className="flex items-center gap-3 bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-xl animate-fade-in">
@@ -725,7 +758,13 @@ export const MiUnidad = () => {
           </div>
         )}
       </div>
-
+      <Paginacion
+            paginaActual={paginaSegura}
+            totalPaginas={totalPaginas}
+            totalItems={totalItems}
+            itemsPorPagina={ITEMS_POR_PAGINA}
+            onCambiarPagina={setPaginaActual}
+          />
   {/* Tabla */}
   <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div
@@ -896,7 +935,7 @@ export const MiUnidad = () => {
                               </button>
                             )}
 
-                            {puedeEditar && (
+                            {puedeEditarYAnular && filtroEstatus === 'RESPUESTAS' && (
                               <button
                                 onClick={() =>
                                   navigate(`/documentos/editar/${doc.id}`, {
@@ -906,6 +945,17 @@ export const MiUnidad = () => {
                                 className="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
                               >
                                 <Pencil size={14} /> Editar
+                              </button>
+                            )}
+
+                              {puedeEditarYAnular && filtroEstatus === 'RESPUESTAS' && (
+                              <button
+                                onClick={() =>
+                                  setDocumentoAEliminar({ id: doc.id, oficio_serial: doc.oficio_serial })
+                                }
+                                className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white border border-red-600 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                              >
+                                <Trash2 size={14} /> Anular
                               </button>
                             )}
                           </>
@@ -919,14 +969,17 @@ export const MiUnidad = () => {
           </table>
         </div>
 
-        <Paginacion
-          paginaActual={paginaSegura}
-          totalPaginas={totalPaginas}
-          totalItems={totalItems}
-          itemsPorPagina={ITEMS_POR_PAGINA}
-          onCambiarPagina={setPaginaActual}
-        />
+       
       </div>
+
+        {/* Modal reutilizable de Confirmación de Eliminación */}
+        <ConfirmModalEliminar
+        isOpen={!!documentoAEliminar}
+        onClose={() => setDocumentoAEliminar(null)}
+        onConfirm={handleConfirmarEliminacion}
+        identificadorDoc={documentoAEliminar?.oficio_serial}
+        loading={loadingEliminar}
+      />
 
       {documentoSeleccionado && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">

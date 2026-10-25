@@ -30,6 +30,21 @@ export const esRecepcionistaOAdmin = (
   next();
 };
 
+export const esRecepcionistaOAdminOJefe = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): void => {
+  const rol = req.user?.rol?.toString().toLowerCase() || "";
+  if (!rol.includes("recep") && rol !== "administrador" && !rol.includes("jefe")){
+    res.status(403).json({
+      error: "Acceso denegado: Se requieren permisos de recepción o administrador o jefe de departamento",
+    });
+    return;
+  }
+  next();
+};
+
 export const esRecepcionistaODespachoOAdmin = (
   req: AuthenticatedRequest,
   res: Response,
@@ -37,6 +52,21 @@ export const esRecepcionistaODespachoOAdmin = (
 ): void => {
   const rol = req.user?.rol?.toString().toLowerCase() || "";
   if (!rol.includes("recep") && rol !== "administrador" && rol !== "secretaria_despacho") {
+    res.status(403).json({
+      error: "Acceso denegado: Se requieren permisos de recepción, despacho o administrador",
+    });
+    return;
+  }
+  next();
+};
+
+export const esRecepcionistaODespachoOAdminOJefe = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): void => {
+  const rol = req.user?.rol?.toString().toLowerCase() || "";
+  if (!rol.includes("recep") && rol !== "administrador" && rol !== "secretaria_despacho" && !rol.includes("jefe")) {
     res.status(403).json({
       error: "Acceso denegado: Se requieren permisos de recepción, despacho o administrador",
     });

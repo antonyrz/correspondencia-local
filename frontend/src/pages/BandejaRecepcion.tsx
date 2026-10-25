@@ -377,7 +377,15 @@ export const BandejaRecepcion = () => {
             (d.estatus === 'VISADO' || d.estatus === 'EN_DESPACHO')
           ).length})
         </button>
+
       </div>
+          <Paginacion
+          paginaActual={paginaSegura}
+          totalPaginas={totalPaginas}
+          totalItems={totalItems}
+          itemsPorPagina={ITEMS_POR_PAGINA}
+          onCambiarPagina={setPaginaActual}
+        />
 
       {/* Tabla */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -578,13 +586,7 @@ export const BandejaRecepcion = () => {
           </table>
         </div>
 
-        <Paginacion
-          paginaActual={paginaSegura}
-          totalPaginas={totalPaginas}
-          totalItems={totalItems}
-          itemsPorPagina={ITEMS_POR_PAGINA}
-          onCambiarPagina={setPaginaActual}
-        />
+
       </div>
 
       {/* Modal reutilizable de Confirmación de Eliminación */}

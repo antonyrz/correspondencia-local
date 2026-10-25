@@ -228,8 +228,8 @@ export const confirmarRecepcionDepartamento = async (id: string | number) => {
   return data;
 };
 
-export const devolverADespacho = async (id: string | number, motivo: string) => {
-  const { data } = await api.patch(`/documentos/${id}/devolver-despacho`, { motivo });
+export const devolverADespacho = async (id: string | number, confirmacion: boolean) => {
+  const { data } = await api.patch(`/documentos/${id}/devolver-despacho`, { confirmacion });
   return data;
 };
 

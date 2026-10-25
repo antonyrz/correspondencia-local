@@ -221,7 +221,7 @@ export const crearDocumento = async (
     const serialDuplicado = await buscarDocumentoPorSerial(String(oficio_serial));
     if (serialDuplicado) {
       res.status(409).json({
-        error: "Ya existe un documento registrado con ese serial. No se puede guardar.",
+        error: "Ya existe un documento registrado con el mismo OFICIO SERIAL. No se puede guardar.",
       });
       return;
     }
@@ -251,7 +251,31 @@ export const crearDocumento = async (
     );
     const requiereRespuestaValor =
       requires_response !== undefined ? requires_response : requiere_respuesta;
-    const fechaValor = fecha_emision || fecha;
+
+    const fechaStr = fecha_emision || fecha;
+
+    let fechaBase = new Date();
+
+    if (fechaStr) {
+      // Si viene del input tipo fecha ("YYYY-MM-DD"), lo separamos para evitar el desfase UTC
+      const partes = fechaStr.toString().split('T')[0].split('-');
+      if (partes.length === 3) {
+        fechaBase = new Date(Number(partes[0]), Number(partes[1]) - 1, Number(partes[2]));
+      } else {
+        fechaBase = new Date(fechaStr);
+      }
+    }
+
+      const ahora = new Date();
+
+      const fechaFinal = new Date(
+        fechaBase.getFullYear(),
+        fechaBase.getMonth(),
+        fechaBase.getDate(),
+        ahora.getHours(),
+        ahora.getMinutes(),
+        ahora.getSeconds()
+      );
 
     const estatusInicial = documento_padre_id
       ? "POR_AVALAR"
@@ -260,7 +284,7 @@ export const crearDocumento = async (
     const nuevoDocumento = await prisma.$transaction(async (tx) => {
       const doc = await tx.documentos.create({
         data: {
-          fecha: fechaValor ? new Date(fechaValor) : new Date(),
+          fecha: fechaFinal,
           oficio_tipo: tipoFinal,
           oficio_serial,
           descripcion,
@@ -347,7 +371,7 @@ export const listarDocumentos = async (
 
     const pageNum = Math.max(1, parseInt(page as string, 10) || 1);
     // Permite lotes grandes para bandejas que filtran/paginan en cliente (máx. 5000)
-    const limitNum = Math.min(5000, Math.max(1, parseInt(limit as string, 10) || 10));
+    const limitNum = Math.max(1, parseInt(limit as string, 10) || 10);
     const skip = (pageNum - 1) * limitNum;
 
     const usuario = req.user as any;
@@ -393,8 +417,8 @@ export const listarDocumentos = async (
       }
     }
 
-    if (estatus) {
-      whereClause.estatus = estatus as string;
+    if (estatus && estatus !== "undefined" && estatus !== "null") {
+      whereClause.estatus = String(estatus).trim();
     }
 
     if (origen_id && !isNaN(Number(origen_id))) {
@@ -466,6 +490,15 @@ export const listarDocumentos = async (
       }),
     ]);
 
+    const documentosOrdernados = [...documentos].sort((a, b) => {
+      const esArchivadoA = a.estatus?.toUpperCase() === "ARCHIVADO";
+      const esArchivadoB = b.estatus?.toUpperCase() === "ARCHIVADO";
+
+      if (esArchivadoA && !esArchivadoB) return 1;  // A va después que B
+      if (!esArchivadoA && esArchivadoB) return -1; // A va antes que B
+      return 0; // Si ambos son archivados o ninguno lo es, mantiene el orden original por fecha
+    });
+
 
     res.json({
       meta: {
@@ -474,7 +507,7 @@ export const listarDocumentos = async (
         limite_por_pagina: limitNum,
         total_paginas: Math.ceil(total / limitNum),
       },
-      data: serializeBigInt(documentos),
+      data: serializeBigInt(documentosOrdernados),
     });
   } catch (error) {
     console.error("Error listando documentos:", error);
@@ -1698,7 +1731,7 @@ export const devolverADespacho = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const { motivo } = req.body;
+    const { confirmacion } = req.body;
     const usuarioId = req.user?.id;
 
     if (!usuarioId) {
@@ -1706,8 +1739,8 @@ export const devolverADespacho = async (
       return;
     }
 
-    if (!motivo || motivo.trim() === "") {
-      res.status(400).json({ error: "Debe indicar el motivo de la devolución" });
+    if (!confirmacion) {
+      res.status(400).json({ error: "Debe confirmar la devolución" });
       return;
     }
 

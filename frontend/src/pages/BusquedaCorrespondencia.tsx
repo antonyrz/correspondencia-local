@@ -402,7 +402,14 @@ export const BusquedaCorrespondencia = () => {
         <div className="p-4 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm">
           {errorApi}
         </div>
-      )}
+      )}  
+      <Paginacion
+        paginaActual={paginaSegura}
+        totalPaginas={totalPaginas}
+        totalItems={totalItems}
+        itemsPorPagina={ITEMS_POR_PAGINA}
+        onCambiarPagina={setPaginaActual}
+      />
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div
@@ -417,6 +424,8 @@ export const BusquedaCorrespondencia = () => {
           onScroll={sincronizarDesdeTabla}
           className="overflow-x-auto"
         >
+
+    
           <table ref={tablaRef} className="w-full min-w-295 text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -547,13 +556,7 @@ export const BusquedaCorrespondencia = () => {
           </table>
         </div>
 
-        <Paginacion
-          paginaActual={paginaSegura}
-          totalPaginas={totalPaginas}
-          totalItems={totalItems}
-          itemsPorPagina={ITEMS_POR_PAGINA}
-          onCambiarPagina={setPaginaActual}
-        />
+
       </div>
 
       {esAdmin && (

@@ -140,6 +140,13 @@ export const Anulados = () => {
       )}
 
       {/* Tabla de Documentos Anulados */}
+      <Paginacion
+          paginaActual={paginaSegura}
+          totalPaginas={totalPaginas}
+          totalItems={totalItems}
+          itemsPorPagina={ITEMS_POR_PAGINA}
+          onCambiarPagina={setPaginaActual}
+        />
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
@@ -205,13 +212,7 @@ export const Anulados = () => {
           </table>
         </div>
 
-        <Paginacion
-          paginaActual={paginaSegura}
-          totalPaginas={totalPaginas}
-          totalItems={totalItems}
-          itemsPorPagina={ITEMS_POR_PAGINA}
-          onCambiarPagina={setPaginaActual}
-        />
+       
       </div>
 
       {/* Modal Ver Detalle (Con información de Anulación) */}

@@ -21,7 +21,7 @@ import {
     archivarDocumentos
 } from "../controllers/documentos.controller";
 import { authenticateToken } from "../middlewares/auth.middleware";
-import { esAdmin, esRecepcionistaOAdmin, esJefeRecepcionOAdmin, esRecepcionistaODespachoOAdmin } from "../middlewares/rol.middleware";
+import { esAdmin, esRecepcionistaOAdmin, esJefeRecepcionOAdmin, esRecepcionistaODespachoOAdmin, esRecepcionistaODespachoOAdminOJefe, esRecepcionistaOAdminOJefe } from "../middlewares/rol.middleware";
 import { upload } from "../middlewares/upload.middleware";
 
 const router = Router();
@@ -33,7 +33,7 @@ router.use(authenticateToken);
 router.get("/", listarDocumentos);
 router.get("/anulados", esAdmin, listarDocumentosAnulados);
 router.get("/verificar-serial", verificarSerialDocumento);
-router.post("/", esRecepcionistaODespachoOAdmin, upload.single("archivo"), crearDocumento);
+router.post("/", esRecepcionistaODespachoOAdminOJefe, upload.single("archivo"), crearDocumento);
 router.post("/enviar-documentos-despacho", enviarDocumentosADespacho);
 router.post("/enviar-respuestas-aval", enviarRespuestasPorAval);
 router.post("/avalar-respuestas", avalarRespuestas);
@@ -51,7 +51,7 @@ router.post("/:id/responder", upload.single("file"), responderDocumento);
 
 // 4. Rutas Dinámicas Genéricas por Parámetro /:id (Al final para que no intercepten a las demás)
 router.get("/:id", obtenerDocumentoPorId);
-router.put("/:id", esRecepcionistaODespachoOAdmin, upload.single("archivo"), actualizarDocumento);
-router.delete("/:id", esJefeRecepcionOAdmin, eliminarDocumento);
+router.put("/:id", esRecepcionistaODespachoOAdminOJefe, upload.single("archivo"), actualizarDocumento);
+router.delete("/:id", esRecepcionistaODespachoOAdminOJefe, eliminarDocumento);
 
 export default router;

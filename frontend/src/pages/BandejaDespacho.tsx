@@ -518,7 +518,7 @@ export const BandejaDespacho: React.FC<BandejaDespachoProps> = ({ onExito }) => 
                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
           >
-            Todos
+            Todos ({documentosFiltrados.length})
           </button>
           <button
             onClick={() => setFiltroEstatus('EN_DESPACHO')}
@@ -596,7 +596,13 @@ export const BandejaDespacho: React.FC<BandejaDespachoProps> = ({ onExito }) => 
           </select>
         </div>
       </div>
-
+      <Paginacion
+          paginaActual={paginaSegura}
+          totalPaginas={totalPaginas}
+          totalItems={totalItems}
+          itemsPorPagina={ITEMS_POR_PAGINA}
+          onCambiarPagina={setPaginaActual}
+        />
 
   {/* Tabla */}
   <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -798,13 +804,7 @@ export const BandejaDespacho: React.FC<BandejaDespachoProps> = ({ onExito }) => 
           </table>
         </div>
 
-        <Paginacion
-          paginaActual={paginaSegura}
-          totalPaginas={totalPaginas}
-          totalItems={totalItems}
-          itemsPorPagina={ITEMS_POR_PAGINA}
-          onCambiarPagina={setPaginaActual}
-        />
+       
       </div>
 
         {/* Modal reutilizable de Confirmación de Eliminación */}

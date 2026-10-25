@@ -25,7 +25,7 @@ export const AppRouter = () => {
         <Route element={<MainLayout />}>
           
           {/* Rutas de Creación y Edición (Compartidas por Recepción y Despacho) */}
-          <Route element={<ProtectedRoute allowedRoles={['administrador', 'recepcionista', 'jefe_recepcion', 'secretaria_despacho']} />}>
+          <Route element={<ProtectedRoute allowedRoles={['administrador', 'recepcionista', 'jefe_recepcion', 'secretaria_despacho', 'jefe_departamento']} />}>
             <Route path="/documentos/crear" element={<NuevoDocumento />} />
             <Route path="/documentos/editar/:id" element={<NuevoDocumento />} />
           </Route>

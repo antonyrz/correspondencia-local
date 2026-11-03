@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuthStore } from '../store/useAuthStore';
 import { User, ShieldCheck, Building2, Key, CheckCircle2, AlertCircle, X, Lock } from 'lucide-react';
+import { resetearPasswordUsuario } from '../api/usuarios.api';
 
 export const PerfilUsuario = () => {
   // 1. Obtenemos el usuario autenticado desde el store de Zustand
@@ -8,7 +9,6 @@ export const PerfilUsuario = () => {
 
   // Estados para el Modal de actualización de contraseña
   const [modalAbierto, setModalAbierto] = useState(false);
-  const [passwordActual, setPasswordActual] = useState('');
   const [nuevaPassword, setNuevaPassword] = useState('');
   const [confirmarPassword, setConfirmarPassword] = useState('');
 
@@ -35,11 +35,12 @@ export const PerfilUsuario = () => {
     setCargando(true);
 
     try {
-      // Aquí realizarás la petición a tu backend cuando conectes el endpoint de cambio de clave
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await resetearPasswordUsuario({
+        id: usuario?.id ?? 0,
+        nueva_password: nuevaPassword,
+      });
 
       setMensajeExito('Contraseña actualizada con éxito.');
-      setPasswordActual('');
       setNuevaPassword('');
       setConfirmarPassword('');
 
@@ -48,7 +49,8 @@ export const PerfilUsuario = () => {
         setMensajeExito('');
       }, 1500);
     } catch (error) {
-      setMensajeError('Error al cambiar la contraseña.');
+      console.error('Error al cambiar la contraseña:', error);
+      setMensajeError('Error al cambiar la contraseña. Por favor, inténtalo de nuevo.');
     } finally {
       setCargando(false);
     }
@@ -74,13 +76,13 @@ export const PerfilUsuario = () => {
       {/* Tarjeta de Datos del Usuario */}
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         {/* Banner Superior */}
-        <div className="h-28 bg-linear-to-r from-blue-700 to-indigo-800 p-6 flex items-end"></div>
+        <div className="h-28 bg-linear-to-r from-green-700 to-green-800 p-6 flex items-end"></div>
 
         <div className="px-6 pb-6 relative">
           {/* Avatar y Botón de Contraseña */}
           <div className="-mt-12 mb-4 flex justify-between items-end">
             <div className="w-24 h-24 rounded-2xl bg-white p-1.5 shadow-md">
-              <div className="w-full h-full rounded-xl bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-700 font-bold text-3xl">
+              <div className="w-full h-full rounded-xl bg-blue-100 border border-blue-200 flex items-center justify-center text-stone-700 font-bold text-3xl">
                 {usuario.nombre ? usuario.nombre[0].toUpperCase() : 'U'}
               </div>
             </div>
@@ -175,7 +177,7 @@ export const PerfilUsuario = () => {
           <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Lock size={18} className="text-blue-600" />
+                <Lock size={18} className="text-stone-600" />
                 <h3 className="font-bold text-slate-800 text-lg">Actualizar Contraseña</h3>
               </div>
               <button
@@ -203,20 +205,6 @@ export const PerfilUsuario = () => {
 
               <div>
                 <label className="block text-xs font-semibold text-slate-600 mb-1.5 uppercase">
-                  Contraseña Actual
-                </label>
-                <input
-                  type="password"
-                  required
-                  value={passwordActual}
-                  onChange={(e) => setPasswordActual(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-sm"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5 uppercase">
                   Nueva Contraseña
                 </label>
                 <input
@@ -225,7 +213,7 @@ export const PerfilUsuario = () => {
                   value={nuevaPassword}
                   onChange={(e) => setNuevaPassword(e.target.value)}
                   placeholder="Mínimo 6 caracteres"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-sm"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-green-500 text-sm"
                 />
               </div>
 
@@ -239,7 +227,7 @@ export const PerfilUsuario = () => {
                   value={confirmarPassword}
                   onChange={(e) => setConfirmarPassword(e.target.value)}
                   placeholder="Repite la nueva contraseña"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-sm"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-green-500 text-sm"
                 />
               </div>
 
@@ -254,9 +242,9 @@ export const PerfilUsuario = () => {
                 <button
                   type="submit"
                   disabled={cargando}
-                  className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm shadow-sm disabled:opacity-50 cursor-pointer"
+                  className="flex-1 py-2.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-medium text-sm shadow-sm disabled:opacity-50 cursor-pointer"
                 >
-                  {cargando ? 'Guardando...' : 'Guardar Cambios'}
+                  {cargando ? 'Guardando...' : 'Guardar Contraseña'}
                 </button>
               </div>
             </form>

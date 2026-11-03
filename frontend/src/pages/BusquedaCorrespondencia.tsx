@@ -282,13 +282,13 @@ export const BusquedaCorrespondencia = () => {
     <div className="max-w-7xl mx-auto p-6 space-y-6">
       <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
+          <div className="p-2.5 bg-green-50 text-green-600 rounded-xl">
             <FileSearch size={22} />
           </div>
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold text-slate-800">Búsqueda de Correspondencia</h1>
-              <span className="px-2.5 py-0.5 bg-blue-100 text-blue-700 font-semibold text-xs rounded-full">
+              <span className="px-2.5 py-0.5 bg-green-100 text-green-700 font-semibold text-xs rounded-full">
                 {documentosFiltrados.length} Documentos
               </span>
             </div>
@@ -308,7 +308,7 @@ export const BusquedaCorrespondencia = () => {
               value={filtroSerial}
               onChange={(e) => setFiltroSerial(e.target.value)}
               placeholder="Ej: FACE-1235"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none"
             />
           </div>
           <div>
@@ -320,7 +320,7 @@ export const BusquedaCorrespondencia = () => {
               value={filtroTitulo}
               onChange={(e) => setFiltroTitulo(e.target.value)}
               placeholder="Buscar por asunto..."
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none"
             />
           </div>
           <div>
@@ -331,7 +331,7 @@ export const BusquedaCorrespondencia = () => {
               type="date"
               value={filtroFecha}
               onChange={(e) => setFiltroFecha(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none"
             />
           </div>
           <div>
@@ -344,7 +344,7 @@ export const BusquedaCorrespondencia = () => {
                 setFiltroCategoria(e.target.value);
                 setFiltroOrigen('');
               }}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none"
             >
               <option value="">Todas</option>
               {categorias.map((cat) => (
@@ -361,7 +361,7 @@ export const BusquedaCorrespondencia = () => {
             <select
               value={filtroOrigen}
               onChange={(e) => setFiltroOrigen(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none"
             >
               <option value="">Todos</option>
               {origenesFiltrados.map((item) => (

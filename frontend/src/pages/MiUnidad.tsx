@@ -105,7 +105,7 @@ const ESTATUS_CONFIG: Record<string, { label: string; color: string }> = {
     color: 'bg-cyan-100 text-cyan-800 border-cyan-300',
   },
   PROCESO_RESPUESTA: { label: 'PROCESO DE RESPUESTA', color: 'bg-orange-100 text-orange-800 border-orange-300' },
-  TRAMITADO: { label: 'TRAMITADO', color: 'bg-teal-100 text-teal-800 border-teal-300' },
+  TRAMITADO: { label: 'TRAMITADO', color: 'bg-stone-100 text-stone-800 border-stone-300' },
   ARCHIVADO: { label: 'ARCHIVADO', color: 'bg-slate-100 text-slate-700 border-slate-300' },
   ANULADO: { label: 'ANULADO', color: 'bg-red-100 text-red-800 border-red-300' },
 };
@@ -588,15 +588,15 @@ export const MiUnidad = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-green-700 p-6 rounded-xl shadow-sm border border-green-200">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-slate-800">{departamentoNombre}</h1>
-            <span className="px-2.5 py-0.5 bg-blue-100 text-blue-700 font-semibold text-xs rounded-full">
+            <h1 className="text-2xl font-bold text-white">{departamentoNombre}</h1>
+            <span className="px-2.5 py-0.5 bg-green-100 text-green-700 font-semibold text-xs rounded-full">
               {documentosDepartamento.length} Documentos
             </span>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-white mt-1">
             Gestión y procesamiento de correspondencias asignadas a esta unidad.
           </p>
         </div>
@@ -611,7 +611,7 @@ export const MiUnidad = () => {
                 placeholder="Buscar por oficio, origen..."
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none w-64"
+                className="pl-10 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none w-64"
               />
             </div>
             {(mostrarArchivar ||
@@ -638,7 +638,7 @@ export const MiUnidad = () => {
                   <button
                     onClick={handleEnviarADespachoPorAval}
                     disabled={loadingEnviarAval}
-                    className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm disabled:opacity-60"
+                    className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm disabled:opacity-60"
                   >
                     <SendHorizontal size={14} />{' '}
                     {loadingEnviarAval ? 'Enviando...' : 'Enviar a despacho por aval'}
@@ -665,7 +665,7 @@ export const MiUnidad = () => {
                 {mostrarRegistrarRespuesta && (
                   <button
                     onClick={() => handleRegistrarRespuesta(documentosRecibidoUnidadSeleccionados[0].id)}
-                    className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                    className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
                   >
                     <MessageSquarePlus size={14} /> Registrar Respuesta
                   </button>
@@ -687,7 +687,7 @@ export const MiUnidad = () => {
             onClick={() => setFiltroEstatus('TODOS')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
               filtroEstatus === 'TODOS'
-                ? 'bg-blue-600 text-white shadow-sm'
+                ? 'bg-green-600 text-white shadow-sm'
                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
           >
@@ -698,11 +698,11 @@ export const MiUnidad = () => {
             onClick={() => setFiltroEstatus('POR_RECEPCIONAR')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer flex items-center gap-2 ${
               filtroEstatus === 'POR_RECEPCIONAR' || filtroEstatus === 'ASIGNADO'
-                ? 'bg-amber-500 text-white shadow-sm'
+                ? 'bg-stone-500 text-white shadow-sm'
                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-amber-300"></span>
+            <span className="w-2 h-2 rounded-full bg-stone-300"></span>
             Por Recepcionar ({cantPorRecep})
           </button>
 
@@ -710,11 +710,11 @@ export const MiUnidad = () => {
             onClick={() => setFiltroEstatus('DEVUELTO_DESPACHO')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer flex items-center gap-2 ${
               filtroEstatus === 'DEVUELTO_DESPACHO'
-                ? 'bg-rose-600 text-white shadow-sm'
+                ? 'bg-red-600 text-white shadow-sm'
                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-rose-300"></span>
+            <span className="w-2 h-2 rounded-full bg-red-300"></span>
             Devueltos a Despacho ({cantDevueltos})
           </button>
 
@@ -751,7 +751,7 @@ export const MiUnidad = () => {
             </span>
             <button
               onClick={() => handleConfirmarRecepcionMasiva()}
-              className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1 transition-colors cursor-pointer shadow-sm"
+              className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1 transition-colors cursor-pointer shadow-sm"
             >
               <CheckCircle2 size={14} /> Confirmar Recepción
             </button>
@@ -929,7 +929,7 @@ export const MiUnidad = () => {
                               <button
                                 onClick={() => handleTramitar([doc.id])}
                                 disabled={loadingTramitar}
-                                className="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1 transition-colors cursor-pointer shadow-sm disabled:opacity-60"
+                                className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1 transition-colors cursor-pointer shadow-sm disabled:opacity-60"
                               >
                                 <Stamp size={14} /> TRAMITADO
                               </button>
@@ -986,7 +986,7 @@ export const MiUnidad = () => {
           <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-10">
               <div>
-                <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
+                <span className="text-xs font-bold text-green-600 uppercase tracking-wider">
                   {documentoSeleccionado.oficio_tipo}
                 </span>
                 <h2 className="text-xl font-bold text-slate-800">
@@ -1148,7 +1148,7 @@ export const MiUnidad = () => {
                             href={hijo.pdf_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs font-semibold text-blue-600 hover:underline inline-flex items-center gap-1"
+                            className="text-xs font-semibold text-green-600 hover:underline inline-flex items-center gap-1"
                           >
                             Ver PDF <ExternalLink size={12} />
                           </a>
@@ -1169,7 +1169,7 @@ export const MiUnidad = () => {
                       href={documentoSeleccionado.pdf_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs font-semibold text-blue-600 hover:underline inline-flex items-center gap-1"
+                      className="text-xs font-semibold text-green-600 hover:underline inline-flex items-center gap-1"
                     >
                       Abrir pestaña <ExternalLink size={12} />
                     </a>
@@ -1197,7 +1197,7 @@ export const MiUnidad = () => {
                   </button>
                   <button
                     onClick={() => handleRegistrarRespuesta(documentoSeleccionado.id)}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg flex items-center gap-2 transition-colors cursor-pointer shadow-sm"
+                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg flex items-center gap-2 transition-colors cursor-pointer shadow-sm"
                   >
                     <MessageSquarePlus size={16} /> Registrar Respuesta
                   </button>
@@ -1218,7 +1218,7 @@ export const MiUnidad = () => {
                 <button
                   onClick={() => handleTramitar([documentoSeleccionado.id])}
                   disabled={loadingTramitar}
-                  className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-lg flex items-center gap-2 transition-colors cursor-pointer shadow-sm disabled:opacity-60"
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg flex items-center gap-2 transition-colors cursor-pointer shadow-sm disabled:opacity-60"
                 >
                   <FileCheck size={16} /> {loadingTramitar ? 'Procesando...' : 'TRAMITADO'}
                 </button>

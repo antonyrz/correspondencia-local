@@ -126,7 +126,7 @@ export const GestionOrigenDestinoModal = ({ isOpen, onClose }: Props) => {
       <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         <div className="p-5 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
+            <div className="p-2 bg-blue-50 text-green-600 rounded-xl">
               <MapPin size={20} />
             </div>
             <div>
@@ -165,7 +165,7 @@ export const GestionOrigenDestinoModal = ({ isOpen, onClose }: Props) => {
                 <select
                   value={categoriaId}
                   onChange={(e) => setCategoriaId(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white text-sm outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">-- Seleccionar categoría --</option>
                   {categorias.map((cat) => (
@@ -184,7 +184,7 @@ export const GestionOrigenDestinoModal = ({ isOpen, onClose }: Props) => {
                   value={nombre}
                   onChange={(e) => setNombre(e.target.value)}
                   placeholder="Ej: DIRECCIÓN DE PLANIFICACIÓN"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-500"
                 />
               </div>
             </div>
@@ -202,7 +202,7 @@ export const GestionOrigenDestinoModal = ({ isOpen, onClose }: Props) => {
               <button
                 type="submit"
                 disabled={saving}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg inline-flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+                className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg inline-flex items-center gap-2 disabled:opacity-50 cursor-pointer"
               >
                 {saving ? (
                   <Loader2 size={16} className="animate-spin" />
@@ -260,7 +260,7 @@ export const GestionOrigenDestinoModal = ({ isOpen, onClose }: Props) => {
                           setExito(null);
                           setError(null);
                         }}
-                        className="px-2.5 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg inline-flex items-center gap-1 cursor-pointer"
+                        className="px-2.5 py-1.5 text-xs font-semibold text-white bg-stone-600 hover:bg-stone-700 border border-stone-200 rounded-lg inline-flex items-center gap-1 cursor-pointer"
                       >
                         <Pencil size={12} /> Editar
                       </button>

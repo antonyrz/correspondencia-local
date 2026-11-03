@@ -170,7 +170,7 @@ export const MainLayout = ({ usuario: propUsuario, onLogout }: Props) => {
     <div className="min-h-screen bg-slate-100 flex">
       {/* SIDEBAR LATERAL IZQUIERDO */}
       <aside
-        className={`bg-slate-900 text-slate-300 flex flex-col transition-all duration-300 relative z-20 ${
+        className={`bg-red-900 text-slate-300 flex flex-col transition-all duration-300 relative z-20 ${
           sidebarColapsado ? 'w-20' : 'w-64'
         }`}
       >
@@ -178,8 +178,8 @@ export const MainLayout = ({ usuario: propUsuario, onLogout }: Props) => {
         <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800">
           {!sidebarColapsado ? (
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold">
-                <Building2 size={18} />
+              <div className="w-8 h-8 rounded-lg  flex items-center justify-center text-white font-bold">
+                <img src="/logo.png" alt="Logo" className="w-15 object-cover h-15 rounded-full object-center" />
               </div>
               <span className="font-bold text-white text-base truncate">Sistema SGC</span>
             </div>
@@ -191,7 +191,7 @@ export const MainLayout = ({ usuario: propUsuario, onLogout }: Props) => {
 
           <button
             onClick={() => setSidebarColapsado(!sidebarColapsado)}
-            className="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer hidden md:block"
+            className="p-1.5 rounded-lg bg-slate-800 text-white hover:text-white transition-colors cursor-pointer hidden md:block"
           >
             {sidebarColapsado ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           </button>
@@ -200,7 +200,7 @@ export const MainLayout = ({ usuario: propUsuario, onLogout }: Props) => {
         {/* Buscador / Selector de Departamento exclusivo para Administrador */}
         {esAdmin && !sidebarColapsado && (
           <div className="p-3 border-b border-slate-800 relative">
-            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+            <label className="text-[10px] font-bold text-white uppercase tracking-wider block mb-1.5">
               Departamento Activo (Admin)
             </label>
             <button
@@ -210,7 +210,7 @@ export const MainLayout = ({ usuario: propUsuario, onLogout }: Props) => {
               <span className="truncate">
                 {departamentoSeleccionado?.nombre || 'Seleccionar...'}
               </span>
-              <ChevronsUpDown size={14} className="text-slate-400 shrink-0 ml-1" />
+              <ChevronsUpDown size={14} className="text-white shrink-0 ml-1" />
             </button>
 
             {comboDeptoAbierto && (
@@ -223,14 +223,14 @@ export const MainLayout = ({ usuario: propUsuario, onLogout }: Props) => {
                   <div className="relative">
                     <Search
                       size={14}
-                      className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400"
+                      className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white"
                     />
                     <input
                       type="text"
                       placeholder="Buscar unidad..."
                       value={busquedaDepto}
                       onChange={(e) => setBusquedaDepto(e.target.value)}
-                      className="w-full pl-8 pr-3 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 outline-none focus:border-blue-500"
+                      className="w-full pl-8 pr-3 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white outline-none focus:border-blue-500"
                     />
                   </div>
 
@@ -280,8 +280,8 @@ export const MainLayout = ({ usuario: propUsuario, onLogout }: Props) => {
                 title={sidebarColapsado ? item.titulo : undefined}
                 className={`w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                   estaActivo
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                    : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                    ? 'bg-white text-red-600 shadow-lg shadow-red-600/30'
+                    : 'text-white hover:bg-white hover:text-red-600'
                 }`}
               >
                 <Icono size={20} className="shrink-0" />
@@ -297,7 +297,7 @@ export const MainLayout = ({ usuario: propUsuario, onLogout }: Props) => {
             <button
               onClick={() => setModalOrigenDestinoAbierto(true)}
               title={sidebarColapsado ? 'Orígenes / Destinos' : undefined}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium bg-slate-800/80 hover:bg-slate-800 text-emerald-400 hover:text-emerald-300 border border-slate-700/50 transition-all cursor-pointer ${
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium bg-slate-800/80 hover:bg-slate-800 text-white hover:text-brown-600 border border-slate-700/50 transition-all cursor-pointer ${
                 sidebarColapsado ? 'justify-center' : ''
               }`}
             >
@@ -310,7 +310,7 @@ export const MainLayout = ({ usuario: propUsuario, onLogout }: Props) => {
             <button
               onClick={() => setModalUsuarioAbierto(true)}
               title={sidebarColapsado ? 'Nuevo Usuario' : undefined}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium bg-slate-800/80 hover:bg-slate-800 text-blue-400 hover:text-blue-300 border border-slate-700/50 transition-all cursor-pointer ${
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium bg-slate-800/80 hover:bg-slate-800 text-white hover:text-brown-600 border border-slate-700/50 transition-all cursor-pointer ${
                 sidebarColapsado ? 'justify-center' : ''
               }`}
             >
@@ -319,11 +319,6 @@ export const MainLayout = ({ usuario: propUsuario, onLogout }: Props) => {
             </button>
           )}
 
-          {!sidebarColapsado && (
-            <div className="pt-2 text-xs text-slate-500 text-center">
-              SGC v1.0 • Control Interno
-            </div>
-          )}
         </div>
       </aside>
 
@@ -368,7 +363,7 @@ export const MainLayout = ({ usuario: propUsuario, onLogout }: Props) => {
                     <p className="text-sm font-semibold text-slate-800 truncate">
                       {usuario?.nombre ? `${usuario.nombre} ${usuario.apellido || ''}` : 'Usuario'}
                     </p>
-                    <p className="text-xs text-blue-600 font-semibold mt-0.5">
+                    <p className="text-xs text-green-600 font-semibold mt-0.5">
                       {departamentoSeleccionado?.nombre || usuario?.departamento || 'Sin Departamento'}
                     </p>
                   </div>

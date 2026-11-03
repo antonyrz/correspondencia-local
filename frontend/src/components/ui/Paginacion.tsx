@@ -51,7 +51,7 @@ export const Paginacion = ({
             onClick={() => onCambiarPagina(num)}
             className={`min-w-8 h-8 px-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
               num === paginaActual
-                ? 'bg-blue-600 text-white shadow-sm'
+                ? 'bg-green-600 text-white shadow-sm'
                 : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
             }`}
           >

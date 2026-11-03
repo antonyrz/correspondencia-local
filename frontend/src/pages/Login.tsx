@@ -75,8 +75,8 @@ export const Login = () => {
     <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
         <div className="flex flex-col items-center mb-6">
-          <div className="p-3 bg-blue-100 text-blue-600 rounded-full mb-2">
-            <LogIn size={28} />
+          <div className="p-3 bg-green-100 text-green-600 rounded-full mb-2">
+            <img src="/logo.png" alt="Logo" className="w-40 h-40 rounded-full" />
           </div>
           <h2 className="text-2xl font-bold text-slate-800">Sistema de Correspondencia</h2>
           <p className="text-slate-500 text-sm">Ingresa tus credenciales para acceder</p>
@@ -94,7 +94,7 @@ export const Login = () => {
             <div className="flex gap-2">
               <select
                 {...register('tipoCedula')}
-                className="w-20 px-3 py-2 border rounded-lg border-slate-300 bg-slate-50 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-20 px-3 py-2 border rounded-lg border-slate-300 bg-slate-50 font-semibold focus:outline-none focus:ring-2 focus:ring-green-300"
               >
                 <option value="V">V-</option>
                 <option value="E">E-</option>
@@ -104,7 +104,7 @@ export const Login = () => {
                 <input
                   type="number"
                   {...register('numeroCedula')}
-                  className="w-full px-3 py-2 border rounded-lg border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-full px-3 py-2 border rounded-lg border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   placeholder="12345678"
                 />
               </div>
@@ -119,7 +119,7 @@ export const Login = () => {
             <input
               type="password"
               {...register('password')}
-              className="w-full px-3 py-2 border rounded-lg border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-lg border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-300"
               placeholder="••••••••"
             />
             {errors.password && (
@@ -130,7 +130,7 @@ export const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
           >
             {loading ? 'Cargando...' : 'Iniciar Sesión'}
           </button>

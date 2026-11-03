@@ -108,7 +108,7 @@ export const CrearUsuarioModal = ({ isOpen, onClose, onSuccess }: Props) => {
         {/* Encabezado */}
         <div className="flex items-center justify-between px-6 py-4 bg-slate-900 text-white border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-blue-600 rounded-lg">
+            <div className="p-2 bg-green-600 rounded-lg">
               <UserPlus size={18} />
             </div>
             <div>
@@ -142,7 +142,7 @@ export const CrearUsuarioModal = ({ isOpen, onClose, onSuccess }: Props) => {
                   value={formData.nombre}
                   onChange={handleChange}
                   placeholder="Ej. Juan"
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                 />
               </div>
             </div>
@@ -161,7 +161,7 @@ export const CrearUsuarioModal = ({ isOpen, onClose, onSuccess }: Props) => {
                   value={formData.apellido}
                   onChange={handleChange}
                   placeholder="Ej. Pérez"
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                 />
               </div>
             </div>
@@ -175,7 +175,7 @@ export const CrearUsuarioModal = ({ isOpen, onClose, onSuccess }: Props) => {
                 <select
                   value={prefijoCedula}
                   onChange={(e) => setPrefijoCedula(e.target.value as 'V' | 'E')}
-                  className="px-2.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                  className="px-2.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent cursor-pointer"
                 >
                   <option value="V">V-</option>
                   <option value="E">E-</option>
@@ -189,7 +189,7 @@ export const CrearUsuarioModal = ({ isOpen, onClose, onSuccess }: Props) => {
                     onChange={(e) => setNumeroCedula(e.target.value.replace(/\D/g, ''))}
                     placeholder="12345678"
                     maxLength={9}
-                    className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                   />
                 </div>
               </div>
@@ -209,7 +209,7 @@ export const CrearUsuarioModal = ({ isOpen, onClose, onSuccess }: Props) => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                 />
               </div>
             </div>
@@ -227,7 +227,7 @@ export const CrearUsuarioModal = ({ isOpen, onClose, onSuccess }: Props) => {
                   onChange={handleChange}
                   required
                   disabled={loadingRoles}
-                  className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none cursor-pointer capitalize truncate disabled:opacity-60"
+                  className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all appearance-none cursor-pointer capitalize truncate disabled:opacity-60"
                 >
                   <option value="">
                     {loadingRoles ? 'Cargando roles...' : 'Seleccionar rol...'}
@@ -239,7 +239,7 @@ export const CrearUsuarioModal = ({ isOpen, onClose, onSuccess }: Props) => {
                   ))}
                 </select>
                 {loadingRoles && (
-                  <Loader2 size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 animate-spin" />
+                  <Loader2 size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600 animate-spin" />
                 )}
               </div>
             </div>
@@ -292,7 +292,7 @@ export const CrearUsuarioModal = ({ isOpen, onClose, onSuccess }: Props) => {
                   ))}
                 </select>
                 {loadingDepto && (
-                  <Loader2 size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 animate-spin" />
+                  <Loader2 size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600 animate-spin" />
                 )}
               </div>
             </div>
@@ -311,7 +311,7 @@ export const CrearUsuarioModal = ({ isOpen, onClose, onSuccess }: Props) => {
             <button
               type="submit"
               disabled={loadingSubmit}
-              className="px-5 py-2 rounded-xl text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/25 transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+              className="px-5 py-2 rounded-xl text-sm font-medium bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/25 transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
             >
               {loadingSubmit && <Loader2 size={16} className="animate-spin" />}
               {loadingSubmit ? 'Guardando...' : 'Crear Usuario'}

@@ -11,11 +11,11 @@ import { esAdmin } from "../middlewares/rol.middleware";
 const router = Router();
 
 // Todas las rutas de gestión de usuarios requieren estar autenticado y ser Admin
-router.use(authenticateToken, esAdmin);
+router.use(authenticateToken);
 
-router.get("/", listarUsuarios);
-router.post("/", crearUsuario);
-router.patch("/:id/estado", cambiarEstadoUsuario);
+router.get("/", esAdmin, listarUsuarios);
+router.post("/", esAdmin, crearUsuario);
+router.patch("/:id/estado", esAdmin, cambiarEstadoUsuario);
 router.patch("/:id/reset-password", resetearPasswordUsuario);
 
 export default router;

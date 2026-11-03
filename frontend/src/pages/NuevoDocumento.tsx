@@ -418,7 +418,7 @@ export const NuevoDocumento = () => {
     <div className="max-w-4xl mx-auto p-4 sm:p-6">
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
         <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
-          <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
+          <div className="p-2.5 bg-green-50 text-green-600 rounded-xl">
             <FileUp size={24} />
           </div>
           <div>
@@ -461,7 +461,7 @@ export const NuevoDocumento = () => {
 
         {cargandoDocumento ? (
           <div className="py-16 flex flex-col items-center justify-center text-slate-500 gap-2">
-            <Loader2 size={28} className="animate-spin text-blue-600" />
+            <Loader2 size={28} className="animate-spin text-green-600" />
             <p className="text-sm font-medium">Cargando documento...</p>
           </div>
         ) : (
@@ -487,7 +487,7 @@ export const NuevoDocumento = () => {
               <input
                 type="text"
                 {...register('serial')}
-                className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-800 text-sm transition-all"
+                className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-slate-800 text-sm transition-all"
                 placeholder="Ej: OF-2026-0045"
               />
             </div>
@@ -500,7 +500,7 @@ export const NuevoDocumento = () => {
                 type="date"
                 max={fechaMaximaHoy()}
                 {...register('fechaEmision')}
-                className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white text-slate-800 text-sm transition-all"
+                className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none bg-white text-slate-800 text-sm transition-all"
               />
               {errors.fechaEmision && <p className="text-red-500 text-xs mt-1 font-medium">{errors.fechaEmision.message}</p>}
             </div>
@@ -514,7 +514,7 @@ export const NuevoDocumento = () => {
             <input
               type="text"
               {...register('titulo')}
-              className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-800 text-sm transition-all"
+              className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-slate-800 text-sm transition-all"
               placeholder="Ej: Memoria descriptiva de proyecto..."
             />
             {errors.titulo && <p className="text-red-500 text-xs mt-1 font-medium">{errors.titulo.message}</p>}
@@ -533,7 +533,7 @@ export const NuevoDocumento = () => {
             ) : (
               <select
                 {...register('tipoDocumento')}
-                className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-800 text-sm transition-all"
+                className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl bg-white focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-slate-800 text-sm transition-all"
               >
                 <option value="">-- Seleccionar Tipo --</option>
                 {TIPOS_DOCUMENTO.map((tipo) => (
@@ -561,7 +561,7 @@ export const NuevoDocumento = () => {
                   categoriaOrigenRegister.onChange(e);
                   setValue('origenId', '');
                 }}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 outline-none text-sm text-slate-800"
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-green-500 outline-none text-sm text-slate-800"
               >
                 <option value="">-- Seleccionar Categoría --</option>
                 {categorias.map((cat) => (
@@ -582,7 +582,7 @@ export const NuevoDocumento = () => {
               <select
                 {...register('origenId')}
                 disabled={!selectedCategoriaOrigen}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 outline-none text-sm text-slate-800 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed"
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-green-500 outline-none text-sm text-slate-800 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed"
               >
                 <option value="">{esRespuesta ? '-- Seleccionar Destino --' : '-- Seleccionar Origen --'}</option>
                 {origenesFiltrados.map((item) => (
@@ -618,7 +618,7 @@ export const NuevoDocumento = () => {
                       value={idStr}
                       checked={recaudosSeleccionados.includes(idStr)}
                       onChange={(e) => toggleRecaudo(idStr, e.target.checked)}
-                      className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer shrink-0"
+                      className="w-4 h-4 text-green-600 rounded border-slate-300 focus:ring-green-500 cursor-pointer shrink-0"
                     />
 
                     <span className={esSinAdjuntos ? 'text-red-600 truncate' : 'truncate'}>
@@ -641,7 +641,7 @@ export const NuevoDocumento = () => {
             <input
               type="text"
               {...register('observacion')}
-              className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-800 text-sm transition-all"
+              className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-slate-800 text-sm transition-all"
             />
           </div>
 
@@ -662,7 +662,7 @@ export const NuevoDocumento = () => {
             {archivoSeleccionado && archivoSeleccionado.length > 0 ? (
               <div className="flex items-center justify-between p-3.5 bg-blue-50/60 border border-blue-200 rounded-xl">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="p-2 bg-blue-100 text-blue-700 rounded-lg shrink-0">
+                  <div className="p-2 bg-green-100 text-green-700 rounded-lg shrink-0">
                     <FileCheck size={20} />
                   </div>
                   <div className="min-w-0">
@@ -696,7 +696,7 @@ export const NuevoDocumento = () => {
                 </div>
                 <label
                   htmlFor="archivo-upload"
-                  className="px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg cursor-pointer"
+                  className="px-3 py-1.5 text-xs font-semibold text-green-700 bg-green-50 hover:bg-green-100 rounded-lg cursor-pointer"
                 >
                   Reemplazar
                 </label>
@@ -704,9 +704,9 @@ export const NuevoDocumento = () => {
             ) : (
               <label
                 htmlFor="archivo-upload"
-                className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-xl cursor-pointer bg-slate-50/50 hover:bg-blue-50/30 transition-all text-center group"
+                className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-slate-300 hover:border-green-500 rounded-xl cursor-pointer bg-slate-50/50 hover:bg-green-50/30 transition-all text-center group"
               >
-                <div className="p-3 bg-white group-hover:bg-blue-100 text-slate-400 group-hover:text-blue-600 rounded-full shadow-sm border border-slate-200 transition-colors mb-2">
+                <div className="p-3 bg-white group-hover:bg-green-100 text-slate-400 group-hover:text-green-600 rounded-full shadow-sm border border-slate-200 transition-colors mb-2">
                   <Upload size={20} />
                 </div>
                 <p className="text-sm font-medium text-slate-700">
@@ -724,7 +724,7 @@ export const NuevoDocumento = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-600/20 disabled:opacity-50 cursor-pointer"
+            className="w-full bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-green-600/20 disabled:opacity-50 cursor-pointer"
           >
             {loading ? (
               <>

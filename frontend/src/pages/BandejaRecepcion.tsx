@@ -294,15 +294,15 @@ export const BandejaRecepcion = () => {
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-green-700 p-6 rounded-xl shadow-sm border border-green-200">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-slate-800">Bandeja de Recepción</h1>
-            <span className="px-2.5 py-0.5 bg-blue-100 text-blue-700 font-semibold text-xs rounded-full">
+            <h1 className="text-2xl font-bold text-white">Bandeja de Recepción</h1>
+            <span className="px-2.5 py-0.5 bg-green-100 text-green-700 font-semibold text-xs rounded-full">
               {documentosFiltrados.length} Registros
             </span>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-white mt-1">
             Recepción inicial e incorporación de correspondencias a Despacho.
           </p>
         </div>
@@ -315,14 +315,14 @@ export const BandejaRecepcion = () => {
               placeholder="Buscar por oficio, origen, asunto..."
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none w-64"
+              className="pl-10 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none w-64"
             />
           </div>
 
           {seleccionados.length > 0 && (
             <button
               onClick={handleEnviarDocumentosADespacho}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors cursor-pointer shadow-sm animate-pulse"
+              className="bg-stone-600 hover:bg-stone-700 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors cursor-pointer shadow-sm animate-pulse"
             >
               <Send size={16} />
               Enviar a Despacho ({seleccionados.length})
@@ -346,7 +346,7 @@ export const BandejaRecepcion = () => {
           onClick={() => setFiltroEstatus('TODOS')}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
             filtroEstatus === 'TODOS'
-              ? 'bg-blue-600 text-white shadow-sm'
+              ? 'bg-green-600 text-white shadow-sm'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
@@ -356,22 +356,22 @@ export const BandejaRecepcion = () => {
           onClick={() => setFiltroEstatus('RECIBIDO')}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer flex items-center gap-2 ${
             filtroEstatus === 'RECIBIDO'
-              ? 'bg-amber-500 text-white shadow-sm'
+              ? 'bg-stone-600 text-white shadow-sm'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
-          <span className="w-2 h-2 rounded-full bg-amber-300"></span>
+          <span className="w-2 h-2 rounded-full bg-stone-300"></span>
           Recibidos en Recepción ({documentos.filter((d) => d.estatus === 'RECIBIDO').length})
         </button>
         <button
           onClick={() => setFiltroEstatus('EN_DESPACHO')}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer flex items-center gap-2 ${
             filtroEstatus === 'EN_DESPACHO'
-              ? 'bg-emerald-600 text-white shadow-sm'
+              ? 'bg-red-600 text-white shadow-sm'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
-          <span className="w-2 h-2 rounded-full bg-emerald-300"></span>
+          <span className="w-2 h-2 rounded-full bg-red-300"></span>
           En Despacho ({documentos.filter((d) => 
             (d.departamento_actual_id ?? d.departamento_actual?.id) === 2 && 
             (d.estatus === 'VISADO' || d.estatus === 'EN_DESPACHO')
@@ -604,7 +604,7 @@ export const BandejaRecepcion = () => {
           <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-10">
               <div>
-                <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
+                <span className="text-xs font-bold text-green-600 uppercase tracking-wider">
                   {documentoSeleccionado.oficio_tipo}
                 </span>
                 <h2 className="text-xl font-bold text-slate-800">
@@ -711,7 +711,7 @@ export const BandejaRecepcion = () => {
                       href={documentoSeleccionado.pdf_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1"
+                      className="text-xs font-semibold text-green-600 hover:text-green-800 hover:underline inline-flex items-center gap-1"
                     >
                       Abrir en pestaña <ExternalLink size={12} />
                     </a>
